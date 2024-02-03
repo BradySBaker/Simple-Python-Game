@@ -13,3 +13,5 @@
     - Player speed
     - Enemy speed
     - Enemy spawn rate
+    
+    ![](https://github.com/BradySBaker/Simple-Python-Game/blob/main/game.gif)
