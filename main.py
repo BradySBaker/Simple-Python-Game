@@ -19,11 +19,11 @@ projectileTimer = 1
 
 clock = pygame.time.Clock()
 
-highScore = 0
+high_score = 0
 
 
 def initialize_game():
-    global player_move, player_pos, projectiles, score, prevObstacleX, rectangle_obstacles, dt, enemies, prevEnemyX, projectile_entities, player_speed, start
+    global player_move, player_pos, projectiles, score, prevObstacleX, rectangle_obstacles, dt, enemies, prevEnemyX, projectile_entities, player_start_speed, start
     dt = 0
     player_move = {'vx': 0, 'vy': 0}
     player_pos = {'x': player.x, 'y': player.y}
@@ -34,7 +34,7 @@ def initialize_game():
     prevObstacleX = player.x
     rectangle_obstacles = []
     enemies = []
-    player_speed = 600
+    player_start_speed = 650
     start = False
 
 def draw_obstacles_floor_player():
@@ -52,7 +52,7 @@ def handle_enemies():
     global prevEnemyX
 
     prevEnemyDist = player_pos['x'] - prevEnemyX
-    maxDist = round(1000000/player_speed)
+    maxDist = round(1000000/player_start_speed)
     if (prevEnemyDist > nextEnemyDistance):
       nextEnemyDistance = random.randint(400, maxDist if maxDist > 400 else 401)
       prevEnemyX = player_pos['x']
@@ -68,9 +68,9 @@ def handle_enemies():
           enemy['goingUp'] = True
 
       if (enemy['going_up']):
-          enemy['pos']['y'] -= player_speed/10 * dt
+          enemy['pos']['y'] -= player_start_speed/10 * dt
       else:
-        enemy['pos']['y'] += player_speed/10 * dt
+        enemy['pos']['y'] += player_start_speed/10 * dt
 
 
       enemy['pos']['x'] -= player_move['vx'] * dt
@@ -81,9 +81,9 @@ def handle_enemies():
 
 
 def move_player():
-    global player_speed
-    if (player_speed < 1300):
-        player_speed += dt * 2
+    global player_start_speed
+    if (player_start_speed < 1300):
+        player_start_speed += dt * 2
     global player_grounded
 
 
@@ -103,7 +103,7 @@ def move_player():
         player.height = 50
     else:
         player.height = 100
-    player_move['vx'] = round(player_speed)
+    player_move['vx'] = round(player_start_speed)
 
     if (key[pygame.K_w] and player_grounded):
         player_move['vy'] = -1000
@@ -135,9 +135,11 @@ def handle_projectile_collision(enemy_entity, enemy):
 
 
 
+
 def handle_shoot():
     global projectileTimer
     mouse_x, mouse_y = pygame.mouse.get_pos()
+    pygame.draw.circle(screen, (255, 255, 255), (mouse_x, mouse_y), 3) #draw reticule
 
     direction_x = mouse_x - player.x
     direction_y = mouse_y - player.y
@@ -171,21 +173,21 @@ def handle_random_obstacles():
         rectangle_obstacles.append(newRect)
 
 def handle_collision(obst_rect):
-    global highScore
+    global high_score
     if (player.colliderect(obst_rect)):
-        if (score > highScore):
-            highScore = score
+        if (score > high_score):
+            high_score = score
         initialize_game()
 
 
 def handle_start():
     global start
-    font = pygame.font.Font(None, 35)
-    text_rendered = font.render('High Score : ' + str(round(highScore)), True, (255, 255, 255))
+    font = pygame.font.Font(None, 26)
+    text_rendered = font.render('High Score : ' + str(round(high_score)), True, (255, 255, 255))
     screen.blit(text_rendered, (width/2.33, height/4))
 
-    text_rendered = font.render('"Use W to Jump and S to crouch"', True, (255, 255, 255))
-    screen.blit(text_rendered, (width/2.8, height/3))
+    text_rendered = font.render('{"Use W to Jump and S to crouch" | "Use mouse to shoot"}', True, (255, 255, 255))
+    screen.blit(text_rendered, (width/3.7, height/3))
 
     font = pygame.font.Font(None, 36)
     text_rendered = font.render('[Press W to play]', True, (255, 255, 255))
@@ -217,10 +219,10 @@ def main():
             handle_enemies()
             score += dt
             font = pygame.font.Font(None, 36)
-            text_rendered = font.render('Score: ' + str(round(score)) + '       High Score : ' + str(round(highScore)), True, (255, 255, 255))
-            screen.blit(text_rendered, (width - 350, 20))
+            text_rendered = font.render('Score: ' + str(round(score)) + '       High Score : ' + str(round(high_score)), True, (255, 255, 255))
+            screen.blit(text_rendered, (width - 400, 20))
             font = pygame.font.Font(None, 20)
-            text_rendered = font.render('Speed: ' + str(round(player_speed)), True, (255, 255, 255))
+            text_rendered = font.render('Speed: ' + str(round(player_start_speed)), True, (255, 255, 255))
             screen.blit(text_rendered, (0, 20))
 
 
