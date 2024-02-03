@@ -1,6 +1,6 @@
 # Simple Python Game
 
-### This is a very simple python game using the PYGAME library to help me learn python in a fun and exciting way!
+### This is a very simple python game using the Pygame library to help me learn python in a fun and exciting way!
 
 ## Features
   - Infinite Scroller
