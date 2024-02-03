@@ -105,7 +105,7 @@ def move_player():
         player.height = 100
     player_move['vx'] = round(player_speed)
 
-    if (key[pygame.K_w] and player_grounded):
+    if (key[pygame.K_SPACE] and player_grounded):
         player_move['vy'] = -1000
 
     player_pos['y'] += player_move['vy'] * dt
