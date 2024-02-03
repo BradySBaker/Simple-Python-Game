@@ -25,7 +25,7 @@ highScore = 0
 
 
 def initialize_game():
-    global player_move, player_pos, projectiles, score, prevObstacleX, rectangle_obstacles, dt, enemies, prevEnemyX, projectile_entities
+    global player_move, player_pos, projectiles, score, prevObstacleX, rectangle_obstacles, dt, enemies, prevEnemyX, projectile_entities, player_speed
     dt = 0
     player_move = {'vx': 0, 'vy': 0}
     player_pos = {'x': player.x, 'y': player.y}
@@ -36,6 +36,7 @@ def initialize_game():
     prevObstacleX = player.x
     rectangle_obstacles = []
     enemies = []
+    player_speed = 500
 
 def draw_obstacles_floor_player():
     screen.fill((0, 0, 0))
@@ -55,10 +56,14 @@ def handle_enemies():
     if (prevEnemyDist > nextEnemyDistance):
       nextEnemyDistance = random.randint(500, 2000)
       prevEnemyX = player_pos['x']
-      enemies.append({'pos': {'x': player_pos['x'], 'y': height / 2}, 'going_up': False if random.randint(0, 1) == 1 else True})
+      enemies.append({'pos': {'x': player.x + width, 'y': height / 2}, 'going_up': False if random.randint(0, 1) == 1 else True})
 
     for enemy in enemies:
-      if (enemy['pos']['y'] < 200):
+      if (enemy['pos']['x'] < player.x - 100):
+          print('deleted')
+          enemies.remove(enemy)
+          continue
+      if (enemy['pos']['y'] < 100):
           enemy['going_up'] = False
       elif (enemy['pos']['y'] > height/1.5):
           enemy['goingUp'] = True
@@ -77,7 +82,12 @@ def handle_enemies():
 
 
 def move_player():
+    global player_speed
+    if (player_speed < 1000):
+        player_speed += dt
     global player_grounded
+
+
     player_move['vx'] = 0
 
     key = pygame.key.get_pressed()
@@ -94,8 +104,7 @@ def move_player():
         player.height = 50
     else:
         player.height = 100
-
-    player_move['vx'] = 1000
+    player_move['vx'] = round(player_speed)
 
     if (key[pygame.K_w] and player_grounded):
         player_move['vy'] = -1000
