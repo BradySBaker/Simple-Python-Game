@@ -5,7 +5,7 @@
 ## Features
   - Infinite Scroller
   - Jump and Crouch to avoid randomized obstacles
-  - Shoot at enemys to gain points and avoid touching them
+  - Shoot at enemies to gain points and avoid touching them
   - Score and High Score displayed at the top of the screen
   - Simple start menu and automatic reset upon losing
 
