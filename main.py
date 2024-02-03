@@ -9,7 +9,7 @@ screen = pygame.display.set_mode((width, height))
 
 pygame.display.set_caption("My Game")
 
-player = pygame.Rect((100, 250, 50, 100))
+player = pygame.Rect((200, 250, 50, 100))
 floor = pygame.Rect((0, height - 50, width, 50))
 nextObstacleDistance = 100
 nextEnemyDistance = 100
@@ -34,7 +34,7 @@ def initialize_game():
     prevObstacleX = player.x
     rectangle_obstacles = []
     enemies = []
-    player_speed = 500
+    player_speed = 600
     start = False
 
 def draw_obstacles_floor_player():
@@ -82,7 +82,7 @@ def handle_enemies():
 
 def move_player():
     global player_speed
-    if (player_speed < 1000):
+    if (player_speed < 1300):
         player_speed += dt * 2
     global player_grounded
 
@@ -105,7 +105,7 @@ def move_player():
         player.height = 100
     player_move['vx'] = round(player_speed)
 
-    if (key[pygame.K_SPACE] and player_grounded):
+    if (key[pygame.K_w] and player_grounded):
         player_move['vy'] = -1000
 
     player_pos['y'] += player_move['vy'] * dt
@@ -180,11 +180,19 @@ def handle_collision(obst_rect):
 
 def handle_start():
     global start
+    font = pygame.font.Font(None, 35)
+    text_rendered = font.render('High Score : ' + str(round(highScore)), True, (255, 255, 255))
+    screen.blit(text_rendered, (width/2.33, height/4))
+
+    text_rendered = font.render('"Use W to Jump and S to crouch"', True, (255, 255, 255))
+    screen.blit(text_rendered, (width/2.8, height/3))
+
     font = pygame.font.Font(None, 36)
-    text_rendered = font.render('High Score : ' + str(round(highScore)) + '        Press Space to play...', True, (255, 255, 255))
-    screen.blit(text_rendered, (width/4, height/4))
+    text_rendered = font.render('[Press W to play]', True, (255, 255, 255))
+    screen.blit(text_rendered, (width/2.55, height/2))
+
     key = pygame.key.get_pressed()
-    if (key[pygame.K_SPACE]):
+    if (key[pygame.K_w]):
         start = True
 
 def main():
